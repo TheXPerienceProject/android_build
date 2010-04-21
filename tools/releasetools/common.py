@@ -390,7 +390,11 @@ class BuildInfo(object):
           "system_other"] = self._partition_fingerprints["system"]
 
     # These two should be computed only after setting self._oem_props.
-    self._device = self.GetOemProperty("ro.product.device")
+    self.override_device = info_dict.get("ota_override_device", "auto")
+    if self.override_device == "auto":
+      self._device = self.GetOemProperty("ro.product.device")
+    else:
+      self._device = self.override_device
     self._fingerprint = self.CalculateFingerprint()
     check_fingerprint(self._fingerprint)
 
