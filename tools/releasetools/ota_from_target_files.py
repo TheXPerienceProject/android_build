@@ -139,6 +139,10 @@ Non-A/B OTA specific options
       Verify the checksums of the updated system and vendor (if any) partitions.
       Non-A/B incremental OTAs only.
 
+  --backup <boolean>
+      Enable or disable the execution of backuptool.sh.
+      Disabled by default.
+
   --override_boot_partition <string>
       Override the partition where the boot image is installed.
       Used for devices with a staging partition (Asus Transformer).
@@ -248,6 +252,7 @@ OPTIONS.extra_script = None
 OPTIONS.worker_threads = multiprocessing.cpu_count() // 2
 if OPTIONS.worker_threads == 0:
   OPTIONS.worker_threads = 1
+OPTIONS.backuptool = False
 OPTIONS.override_boot_partition = ''
 OPTIONS.mount_by_label = False
 OPTIONS.two_step = False
@@ -835,6 +840,11 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # the update of the system partition takes the remaining progress.
   system_progress = 0.9 - (len(block_diff_dict) - 1) * 0.1
 
+  if OPTIONS.backuptool:
+    script.Mount("/system")
+    script.RunBackup("backup")
+    script.Unmount("/system")
+
   if OPTIONS.wipe_user_data:
     script.Print("Formatting /data")
     script.FormatPartition("/data", OPTIONS.mount_by_label)
@@ -889,6 +899,12 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
                              write_verify_script=OPTIONS.verify)
 
   CheckVintfIfTrebleEnabled(OPTIONS.input_tmp, target_info)
+
+  if OPTIONS.backuptool:
+    script.ShowProgress(0.02, 10)
+    script.Mount("/system")
+    script.RunBackup("restore")
+    script.Unmount("/system")
 
   boot_img = common.GetBootableImage(
       "boot.img", "boot.img", OPTIONS.input_tmp, "BOOT")
@@ -2128,6 +2144,8 @@ def main(argv):
       else:
         raise ValueError("Cannot parse value %r for option %r - only "
                          "integers are allowed." % (a, o))
+    elif o in ("--backup"):
+      OPTIONS.backuptool = bool(a.lower() == 'true')
     elif o in ("--override_boot_partition"):
       OPTIONS.override_boot_partition = a
     elif o in ("--mount_by_label"):
@@ -2195,6 +2213,7 @@ def main(argv):
                                  "override_timestamp",
                                  "extra_script=",
                                  "worker_threads=",
+                                 "backup=",
                                  "override_boot_partition=",
                                  "two_step",
                                  "include_secondary",
@@ -2264,6 +2283,9 @@ def main(argv):
 
   if "ota_mount_by_label" in OPTIONS.info_dict:
     OPTIONS.override_device = bool(OPTIONS.info_dict.get("ota_mount_by_label").lower() == 'true')
+
+  if "ota_backuptool" in OPTIONS.info_dict:
+    OPTIONS.backuptool = bool(OPTIONS.info_dict.get("ota_backuptool").lower() == 'true')
 
   # Assume retrofitting dynamic partitions when base build does not set
   # use_dynamic_partitions but target build does.
