@@ -822,8 +822,45 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # Dump fingerprints
   script.Print("Target: {}".format(target_info.fingerprint))
 
+  android_version = target_info.GetBuildProp("ro.build.version.release")
+  xperience_version = target_info.GetBuildProp("ro.xperience.build.version")
+  build_id = target_info.GetBuildProp("ro.build.id")
+  build_date = target_info.GetBuildProp("ro.build.date")
+  security_patch = target_info.GetBuildProp("ro.build.version.security_patch")
+  device = target_info.GetBuildProp("ro.xpe.device")
+  device_status = target_info.GetBuildProp("ro.xpe.channeltype")
+  sbranch = target_info.GetBuildProp("ro.build.version.system.qcom")
+  vbranch = target_info.GetBuildProp("ro.build.version.vendor.qcom")
+  model = target_info.GetBuildProp("ro.product.model")
+
+  script.Print("----------------------------------------------");
+  script.Print("      ) (       (   (          )             ");
+  script.Print("   ( /( )\ )    )\ ))\ )    ( /(   (         ");
+  script.Print("   )\()|()/((  (()/(()/((   )\())  )\   (    ");
+  script.Print("  ((_)\ /(_))\  /(_))(_))\ ((_)\ (((_)_( )\  ");
+  script.Print("  (__((_|_))((_)(_))(_))((_) _((_))\___((_)  ");
+  script.Print("  \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  ");
+  script.Print("   >  <|  _/ _||   /| || _|| .` || (__| _|   ");
+  script.Print("  /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  ");
+  script.Print("     (C)2011-2020 The XPerience Project      ");
+  script.Print("               By Klozz Jesus                ");
+  script.Print("           TeamMEX@xda-developers            ");
+  script.Print("----------------------------------------------");
+  script.Print(" Android version: %s"%(android_version));
+  script.Print(" XPerience version: %s"%(xperience_version));
+  script.Print(" Build id: %s"%(build_id));
+  script.Print(" CAF System Branch: %s"%(sbranch));
+  script.Print(" CAF Vendor Branch: %s"%(vbranch));
+  script.Print(" Build date: %s"%(build_date));
+  script.Print(" Security patch: %s"%(security_patch));
+  script.Print(" Device: %s"%(device));
+  script.Print(" Model: %s"%(model));
+  script.Print(" Device Status: %s"%(device_status));
+  script.Print("----------------------------------------------");
+
   device_specific.FullOTA_InstallBegin()
 
+  script.Print("Copying Backup tools...                       ");
   CopyInstallTools(output_zip)
   script.UnpackPackageDir("install", "/tmp/install")
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0o755, 0o644, None, None)
@@ -835,6 +872,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     sysmount = "/system"
 
   if OPTIONS.backuptool:
+    script.Print("----------------------------------------------");
+    script.Print(" Running backup tool...                       ");
+    script.Print(" Backing up...                                ");
     script.RunBackup("backup", sysmount, target_info.get('use_dynamic_partitions') == "true")
 
   # All other partitions as well as the data wipe use 10% of the progress, and
@@ -872,8 +912,13 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
+    script.Print("----------------------------------------------");
+    script.Print("Running backup tool...                        ");
+    script.Print("Restore phase...                              ");
     script.RunBackup("restore", sysmount, target_info.get('use_dynamic_partitions') == "true")
 
+  script.Print("----------------------------------------------");
+  script.Print("Flashing kernel image...                      ");
   script.WriteRawImage("/boot", "boot.img")
 
   script.ShowProgress(0.1, 10)
@@ -1509,10 +1554,13 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
     script.Comment("Stage 1/3")
 
   # Dump fingerprints
+  script.Print("----------------------------------------------");
   script.Print("Source: {}".format(source_info.fingerprint))
   script.Print("Target: {}".format(target_info.fingerprint))
+  script.Print("----------------------------------------------");
 
   script.Print("Verifying current system...")
+  script.Print("----------------------------------------------");
 
   device_specific.IncrementalOTA_VerifyBegin()
 
@@ -1601,6 +1649,7 @@ else
     if updating_boot:
       if include_full_boot:
         logger.info("boot image changed; including full.")
+        script.Print("----------------------------------------------");
         script.Print("Installing boot image...")
         script.WriteRawImage("/boot", "boot.img")
       else:
@@ -1608,6 +1657,7 @@ else
         # contents of the boot partition, and write it back to the
         # partition.
         logger.info("boot image changed; including patch.")
+        script.Print("----------------------------------------------");
         script.Print("Patching boot image...")
         script.ShowProgress(0.1, 10)
         target_expr = 'concat("{}:",{},":{}:{}")'.format(
@@ -1625,6 +1675,7 @@ else
     script.AppendExtra(OPTIONS.extra_script)
 
   if OPTIONS.wipe_user_data:
+    script.Print("----------------------------------------------");
     script.Print("Erasing user data...")
     script.FormatPartition("/data")
 
