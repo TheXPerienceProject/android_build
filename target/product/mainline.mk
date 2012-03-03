@@ -26,8 +26,12 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_product.mk)
 
 $(call inherit-product, frameworks/base/data/sounds/AllAudio.mk)
 
+ifeq ($(XPERIENCE_BUILD),)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.ringtone=Ring_Synth_04.ogg \
+endif
+
+PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.android.dataroaming=true \
 endif
 
