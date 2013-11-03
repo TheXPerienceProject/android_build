@@ -1786,6 +1786,8 @@ function __detect_shell() {
             ;;
         *zsh*)
             ;;
+        *zsh*)
+            ;;
         *)
             echo "WARNING: Only bash and zsh are supported, use of other shell may lead to erroneous results"
             ;;
