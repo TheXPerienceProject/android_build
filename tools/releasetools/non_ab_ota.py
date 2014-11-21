@@ -234,7 +234,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("  \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  ");
   script.Print("   >  <|  _/ _||   /| || _|| .` || (__| _|   ");
   script.Print("  /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  ");
-  script.Print("     (C)2011-2022 The XPerience Project      ");
+  script.Print("     (C)2011-2024 The XPerience Project      ");
   script.Print("           By Carlos 'Klozz' Jesus           ");
   script.Print("           TeamMEX@xda-developers            ");
   script.Print("----------------------------------------------");
@@ -248,6 +248,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" Device Status: %s"%(device_status));
   script.Print("----------------------------------------------");
 
+  script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
   CopyInstallTools(output_zip)
