@@ -532,8 +532,8 @@ ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
   endif
   # Disable ccache (or other compiler wrapper) except gomacc, which
   # can handle -fprofile-use properly.
-  my_cc_wrapper := $(filter $(GOMA_CC) $(RBE_WRAPPER),$(my_cc_wrapper))
-  my_cxx_wrapper := $(filter $(GOMA_CC) $(RBE_WRAPPER),$(my_cxx_wrapper))
+  my_cc_wrapper := $(filter $(CCACHE_EXEC) $(GOMA_CC) $(RBE_WRAPPER),$(my_cc_wrapper))
+  my_cxx_wrapper := $(filter $(CCACHE_EXEC) $(GOMA_CC) $(RBE_WRAPPER),$(my_cxx_wrapper))
 endif
 
 ###########################################################
