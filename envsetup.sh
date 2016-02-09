@@ -1784,12 +1784,9 @@ function __detect_shell() {
         *zsh*)
             echo zsh
             ;;
-        *zsh*)
-            ;;
-        *zsh*)
-            ;;
         *)
-            echo "WARNING: Only bash and zsh are supported, use of other shell may lead to erroneous results"
+            echo unknown
+            return 1
             ;;
     esac
     return
