@@ -526,7 +526,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   androidv = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
   product =  GetBuildProp("ro.product.name", OPTIONS.info_dict)
   secure =  GetBuildProp("ro.build.version.security_patch", OPTIONS.info_dict)
-  platform = GetBuildProp("ro.product.board", OPTIONS.info_dict)
   brand = GetBuildProp("ro.product.brand", OPTIONS.info_dict)
   if GetBuildProp("ro.xpe.model", OPTIONS.info_dict) is not None:
     model = GetBuildProp("ro.xpe.model", OPTIONS.info_dict)
@@ -537,7 +536,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Print("#   Android Security: %s             #"%(secure));
     script.Print("#   Product Name: %s                   #"%(product));
     script.Print("#   Device Name: %s (%s)           #"%(model, device));
-    script.Print("#   Platform: %s                        #"%(platform));
     script.Print("#   Brand: %s                          #"%(brand));
     script.Print("##############################################");
   else:
@@ -548,7 +546,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Print("#   Android Security: %s             #"%(secure));
     script.Print("#   Product Name: %s              #"%(product));
     script.Print("#   Device Name: %s (%s)            #"%(model, device));
-    script.Print("#   Platform: %s                        #"%(platform));
     script.Print("#   Brand: %s                          #"%(brand));
     script.Print("##############################################");
 
