@@ -218,7 +218,7 @@ class EdifyGenerator(object):
                             amount,
                             common.ErrorCode.INSUFFICIENT_CACHE_SPACE))
 
-  def Mount(self, mount_point, mount_options_by_format=""):
+  def Mount(self, mount_point, mount_by_label = False, mount_options_by_format=""):
     """Mount the partition with the given mount_point.
       mount_options_by_format:
       [fs_type=option[,option]...[|fs_type=option[,option]...]...]
@@ -228,19 +228,19 @@ class EdifyGenerator(object):
     fstab = self.fstab
     if fstab:
       p = fstab[mount_point]
-      mount_dict = {}
-      if mount_options_by_format is not None:
-        for option in mount_options_by_format.split("|"):
-          if "=" in option:
-            key, value = option.split("=", 1)
-            mount_dict[key] = value
-      mount_flags = mount_dict.get(p.fs_type, "")
-      if p.context is not None:
-        mount_flags = p.context + ("," + mount_flags if mount_flags else "")
-      self.script.append('mount("%s", "%s", %s, "%s", "%s");' % (
-          p.fs_type, common.PARTITION_TYPES[p.fs_type],
-          self._GetSlotSuffixDeviceForEntry(p),
-          p.mount_point, mount_flags))
+      if mount_by_label:
+        self.script.append('run_program("/sbin/mount", "%s");' % (mount_point,))
+      else:
+        mount_dict = {}
+        if mount_options_by_format is not None:
+          for option in mount_options_by_format.split("|"):
+            if "=" in option:
+              key, value = option.split("=", 1)
+              mount_dict[key] = value
+        self.script.append('mount("%s", "%s", "%s", "%s", "%s");' %
+                         (p.fs_type, common.PARTITION_TYPES[p.fs_type],
+                          self._GetSlotSuffixDeviceForEntry(p), p.mount_point,
+                          mount_dict.get(p.fs_type, "")))
       self.mounts.add(p.mount_point)
 
   def Comment(self, comment):
@@ -266,17 +266,22 @@ class EdifyGenerator(object):
             self._GetSlotSuffixDeviceForEntry(p),
             common.ErrorCode.TUNE_PARTITION_FAILURE, partition))
 
-  def FormatPartition(self, partition):
+  def FormatPartition(self, partition, mount_by_label = False):
     """Format the given partition, specified by its mount point (eg,
     "/system")."""
 
     fstab = self.fstab
     if fstab:
       p = fstab[partition]
-      self.script.append('format("%s", "%s", %s, "%s", "%s");' %
-                         (p.fs_type, common.PARTITION_TYPES[p.fs_type],
-                          self._GetSlotSuffixDeviceForEntry(p),
-                          p.length, p.mount_point))
+      if mount_by_label:
+        if not p.mount_point in self.mounts:
+          self.script.mount(p.mount_point)
+        self.script.append('run_program("/sbin/rm", "-rf", "%s");' % (p.mount_point,))
+      else:
+        self.script.append('format("%s", "%s", "%s", "%s", "%s");' %
+                           (p.fs_type, common.PARTITION_TYPES[p.fs_type],
+                            self._GetSlotSuffixDeviceForEntry(p),
+                            p.length, p.mount_point))
 
   def WipeBlockDevice(self, partition):
     if partition not in ("/system", "/vendor"):
@@ -399,6 +404,11 @@ class EdifyGenerator(object):
         else:
           self.script.append(
               'package_extract_file("%(fn)s", %(device)s);' % args)
+      elif partition_type == "BML":
+          self.script.append(
+            ('assert(package_extract_file("%(fn)s", /tmp/%(device)s.img),\n'
+             '       write_raw_image("/tmp/%(device)s.img", %(device)s),\n'
+             '       delete(/tmp/%(device)s.img));') % args)
       else:
         raise ValueError(
             "don't know how to write \"%s\" partitions" % p.fs_type)
