@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2019 The Android Open Source Project
 #
@@ -28,12 +29,16 @@ PRODUCT_PACKAGES += \
     Contacts \
     DeskClock \
     Gallery2 \
-    LatinIME \
     Music \
     preinstalled-packages-platform-handheld-product.xml \
     QuickSearchBox \
     SettingsIntelligence \
     frameworks-base-overlays
+
+ifeq ($(XPERIENCE_BUILD),)
+PRODUCT_PACKAGES += \
+    LatinIME
+endif
 
 PRODUCT_PACKAGES_DEBUG += \
     frameworks-base-overlays-debug
