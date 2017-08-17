@@ -298,6 +298,9 @@ include $(BUILD_SYSTEM)/envsetup.mk
 FIND_LEAVES_EXCLUDES := $(addprefix --prune=, $(SCAN_EXCLUDE_DIRS) .repo .git)
 
 -include vendor/extra/BoardConfigExtra.mk
+ifneq ($(XPERIENCE_BUILD),)
+include vendor/xperience/config/BoardConfigXPerience.mk
+endif
 
 # The build system exposes several variables for where to find the kernel
 # headers:
@@ -1233,6 +1236,14 @@ dont_bother_goals := out \
     vbmetaimage-nodeps \
     product-graph dump-products
 
+ifneq ($(XPERIENCE_BUILD),)
+ifneq ($(wildcard device/xperience/sepolicy/common/sepolicy.mk),)
+## We need to be sure the global selinux policies are included
+## last, to avoid accidental resetting by device configs
+$(eval include device/xperience/sepolicy/common/sepolicy.mk)
+endif
+endif
+
 ifeq ($(CALLED_FROM_SETUP),true)
 include $(BUILD_SYSTEM)/android_soong_config_vars.mk
 include $(BUILD_SYSTEM)/ninja_config.mk
@@ -1246,5 +1257,8 @@ DEFAULT_DATA_OUT_MODULES := ltp $(ltp_packages) $(kselftest_modules)
 
 # Make RECORD_ALL_DEPS readonly and also set it if deps-license is a goal.
 RECORD_ALL_DEPS :=$= $(filter true,$(RECORD_ALL_DEPS))$(filter deps-license,$(MAKECMDGOALS))
+
+# Include any vendor specific config.mk file
+-include vendor/*/build/core/config.mk
 
 include $(BUILD_SYSTEM)/dumpvar.mk
