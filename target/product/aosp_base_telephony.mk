@@ -15,5 +15,8 @@
 #
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-#PRODUCT_PACKAGES += \
-#    messaging
+PRODUCT_PACKAGES += \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
