@@ -2266,7 +2266,7 @@ $(recovery_uncompressed_ramdisk): $(MKBOOTFS) \
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sdcard $(TARGET_RECOVERY_ROOT_OUT)/tmp
 	# Copying baseline ramdisk...
 	# Use rsync because "cp -Rf" fails to overwrite broken symlinks on Mac.
-	rsync -a --exclude=sdcard $(IGNORE_RECOVERY_SEPOLICY) $(IGNORE_CACHE_LINK) $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
+	rsync -a --exclude=sdcard --exclude=vendor $(IGNORE_RECOVERY_SEPOLICY) $(IGNORE_CACHE_LINK) $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
 	# Modifying ramdisk contents...
 	$(if $(filter true,$(BOARD_BUILD_SYSTEM_ROOT_IMAGE)),, \
 	  ln -sf /system/bin/init $(TARGET_RECOVERY_ROOT_OUT)/init)
