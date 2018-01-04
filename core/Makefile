@@ -2754,6 +2754,8 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
+	   XPE_TARGET_PACKAGE := $(PRODUCT_OUT)/xperience-$(XPE_VERSION).zip
+
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(XPE_TARGET_PACKAGE)
@@ -2775,7 +2777,7 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 	@echo -e "            				 Build completed! Now Flash the Rom and ENJOY!!       			                  "  
 	@echo -e "============================================================================================================"
 	@echo -e "                      XPerence 12.1.0 is based on Android 8.1.0 developed by Klozz Jesus aka TeamMEX 			  "
-	@echo -e "==================================-Package complete-========================================================"
+	@echo -e "====================================)-Package complete-====================================================="
 	@echo -e "zip: $(XPE_TARGET_PACKAGE)" >&2
 	@echo -e "============================================================================================================"
 
