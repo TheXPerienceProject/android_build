@@ -512,7 +512,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("# \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  #");
   script.Print("#  >  <|  _/ _||   /| || _|| .` || (__| _|   #");
   script.Print("# /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  #");
-  script.Print("#      (C)2017 The XPerience Project         #");
+  script.Print("#      (C)2018 The XPerience Project         #");
   script.Print("#              By Klozz Jesus                #");
   script.Print("#          TeamMEX@xda-developers            #");
   script.Print("##############################################");
@@ -531,7 +531,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if GetBuildProp("ro.xpe.model", OPTIONS.info_dict) is not None:
     model = GetBuildProp("ro.xpe.model", OPTIONS.info_dict)
     script.Print("#   Software Channel: %s               #"%(channel));
-    script.Print("#   Android ID: %s                        #"%(buildid));
+    script.Print("#   Android ID: %s                    #"%(buildid));
     script.Print("#   XPerience Version: %s        #"%(displayv));
     script.Print("#   Android Version: %s                   #"%(androidv));
     script.Print("#   Android Security: %s             #"%(secure));
