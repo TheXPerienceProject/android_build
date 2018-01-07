@@ -41,7 +41,6 @@ PRODUCT_PACKAGES += \
     InputDevices \
     KeyChain \
     Keyguard \
-    Launcher2 \
     ManagedProvisioning \
     MtpDocumentsProvider \
     PicoTts \
@@ -52,6 +51,7 @@ PRODUCT_PACKAGES += \
     ProxyHandler \
     QuickSearchBox \
     Settings \
+    SettingsBlackThemeOverlay \
     SharedStorageBackup \
     StorageManager \
     Telecom \
