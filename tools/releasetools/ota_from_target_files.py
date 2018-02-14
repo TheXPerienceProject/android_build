@@ -517,40 +517,40 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("#          TeamMEX@xda-developers            #");
   script.Print("##############################################");
 
-  build2 = GetBuildProp("ro.build.date", OPTIONS.info_dict)
-  script.Print("#   Compiled: %s   #"%(build2));
-  device = GetBuildProp("ro.xpe.device", OPTIONS.info_dict)
-  channel = GetBuildProp("ro.xpe.channeltype", OPTIONS.info_dict)
-  buildid = GetBuildProp("ro.build.id", OPTIONS.info_dict)
-  displayv = GetBuildProp("ro.xpe.display.version", OPTIONS.info_dict)
-  androidv = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
-  product =  GetBuildProp("ro.product.name", OPTIONS.info_dict)
-  secure =  GetBuildProp("ro.build.version.security_patch", OPTIONS.info_dict)
-  platform = GetBuildProp("ro.product.board", OPTIONS.info_dict)
-  brand = GetBuildProp("ro.product.brand", OPTIONS.info_dict)
-  if GetBuildProp("ro.xpe.model", OPTIONS.info_dict) is not None:
-    model = GetBuildProp("ro.xpe.model", OPTIONS.info_dict)
-    script.Print("#   Software Channel: %s               #"%(channel));
-    script.Print("#   Android ID: %s                    #"%(buildid));
-    script.Print("#   XPerience Version: %s        #"%(displayv));
-    script.Print("#   Android Version: %s                   #"%(androidv));
-    script.Print("#   Android Security: %s             #"%(secure));
-    script.Print("#   Product Name: %s                   #"%(product));
-    script.Print("#   Device Name: %s (%s)           #"%(model, device));
-    script.Print("#   Platform: %s                        #"%(platform));
-    script.Print("#   Brand: %s                          #"%(brand));
-    script.Print("##############################################");
-  else:
-    script.Print("#   Software Channel: %s               #"%(channel));
-    script.Print("#   Android ID: %s                      #"%(buildid));
-    script.Print("#   XPerience Version: %s      #"%(displayv));
-    script.Print("#   Android Version: %s                   #"%(androidv));
-    script.Print("#   Android Security: %s             #"%(secure));
-    script.Print("#   Product Name: %s              #"%(product));
-    script.Print("#   Device Name: %s (%s)            #"%(model, device));
-    script.Print("#   Platform: %s                        #"%(platform));
-    script.Print("#   Brand: %s                          #"%(brand));
-    script.Print("##############################################");
+#  build2 = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+#  script.Print("#   Compiled: %s   #"%(build2));
+#  device = GetBuildProp("ro.xpe.device", OPTIONS.info_dict)
+#  channel = GetBuildProp("ro.xpe.channeltype", OPTIONS.info_dict)
+#  buildid = GetBuildProp("ro.build.id", OPTIONS.info_dict)
+#  displayv = GetBuildProp("ro.xpe.display.version", OPTIONS.info_dict)
+#  androidv = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
+#  product =  GetBuildProp("ro.product.name", OPTIONS.info_dict)
+#  secure =  GetBuildProp("ro.build.version.security_patch", OPTIONS.info_dict)
+#  platform = GetBuildProp("ro.product.board", OPTIONS.info_dict)
+#  brand = GetBuildProp("ro.product.brand", OPTIONS.info_dict)
+#  if GetBuildProp("ro.xpe.model", OPTIONS.info_dict) is not None:
+#    model = GetBuildProp("ro.xpe.model", OPTIONS.info_dict)
+#    script.Print("#   Software Channel: %s               #"%(channel));
+#    script.Print("#   Android ID: %s                    #"%(buildid));
+#    script.Print("#   XPerience Version: %s        #"%(displayv));
+#    script.Print("#   Android Version: %s                   #"%(androidv));
+#    script.Print("#   Android Security: %s             #"%(secure));
+#    script.Print("#   Product Name: %s                   #"%(product));
+#    script.Print("#   Device Name: %s (%s)           #"%(model, device));
+#    script.Print("#   Platform: %s                        #"%(platform));
+#    script.Print("#   Brand: %s                          #"%(brand));
+#    script.Print("##############################################");
+#  else:
+#    script.Print("#   Software Channel: %s               #"%(channel));
+#    script.Print("#   Android ID: %s                      #"%(buildid));
+#    script.Print("#   XPerience Version: %s      #"%(displayv));
+#    script.Print("#   Android Version: %s                   #"%(androidv));
+#    script.Print("#   Android Security: %s             #"%(secure));
+#    script.Print("#   Product Name: %s              #"%(product));
+#    script.Print("#   Device Name: %s (%s)            #"%(model, device));
+#    script.Print("#   Platform: %s                        #"%(platform));
+#    script.Print("#   Brand: %s                          #"%(brand));
+#    script.Print("##############################################");
 
   # Place a copy of file_contexts.bin into the OTA package which will be used
   # by the recovery program.
@@ -651,6 +651,12 @@ def GetBuildProp(prop, info_dict):
   except KeyError:
     raise common.ExternalError("couldn't find %s in build.prop" % (prop,))
 
+def GetVendorBuildProp(prop, info_dict):
+  """Returns the inquired vendor build property."""
+  try:
+    return info_dict.get("vendor.build.prop", {})[prop]
+  except KeyError:
+    raise common.ExternalError("couldn't find %s in vendor.build.prop" % (prop,))
 
 def HandleDowngradeMetadata(metadata):
   # Only incremental OTAs are allowed to reach here.
