@@ -52,6 +52,7 @@ PRODUCT_PACKAGES += \
     QuickSearchBox \
     Settings \
     SettingsBlackThemeOverlay \
+	SettingsDarkThemeOverlay \
     SharedStorageBackup \
     StorageManager \
     Telecom \
