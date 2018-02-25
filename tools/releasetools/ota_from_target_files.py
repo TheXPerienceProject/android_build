@@ -143,6 +143,9 @@ Non-A/B OTA specific options
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
 
+  --brotli <boolean>
+     Enable (default) or disable usage of brotli
+
   --override_boot_partition <string>
       Override the partition where the boot image is installed.
       Used for devices with a staging partition (Asus Transformer).
@@ -282,6 +285,7 @@ OPTIONS.disable_fec_computation = False
 OPTIONS.force_non_ab = False
 OPTIONS.boot_variable_file = None
 
+OPTIONS.brotli = True
 
 METADATA_NAME = 'META-INF/com/android/metadata'
 POSTINSTALL_CONFIG = 'META/postinstall_config.txt'
@@ -669,7 +673,8 @@ def GetBlockDifferences(target_zip, source_zip, target_info, source_info,
     return common.BlockDifference(name, partition_tgt, partition_src,
                                   check_first_block,
                                   version=blockimgdiff_version,
-                                  disable_imgdiff=disable_imgdiff)
+                                  disable_imgdiff=disable_imgdiff,
+                                  brotli=OPTIONS.brotli)
 
   if source_zip:
     # See notes in common.GetUserImage()
@@ -691,7 +696,7 @@ def GetBlockDifferences(target_zip, source_zip, target_info, source_info,
                                 info_dict=target_info,
                                 reset_file_map=True)
       block_diff_dict[partition] = common.BlockDifference(partition, tgt,
-                                                          src=None)
+                                                          src=None, brotli=OPTIONS.brotli)
     # Incremental OTA update.
     else:
       block_diff_dict[partition] = GetIncrementalBlockDifferenceForPartition(
@@ -2149,6 +2154,8 @@ def main(argv):
                          "integers are allowed." % (a, o))
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("--brotli"):
+      OPTIONS.brotli = bool(a.lower() == 'true')
     elif o in ("--override_boot_partition"):
       OPTIONS.override_boot_partition = a
     elif o in ("--mount_by_label"):
@@ -2217,6 +2224,7 @@ def main(argv):
                                  "extra_script=",
                                  "worker_threads=",
                                  "backup=",
+                                 "brotli=",
                                  "override_boot_partition=",
                                  "two_step",
                                  "include_secondary",
