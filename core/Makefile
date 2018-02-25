@@ -5028,6 +5028,7 @@ PATH=$(INTERNAL_USERIMAGES_BINARY_PATHS):$$PATH \
         --verbose \
         --extracted_input_target_files $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE)) \
         --path $(HOST_OUT) \
+        --brotli=$(brotli) \
         $(TARGET_RELEASETOOL_OTA_FROM_TARGET_ADDITIONAL_ARGS) \
         $(if $(OEM_OTA_CONFIG), --oem_settings $(OEM_OTA_CONFIG)) \
         $(2) \
@@ -5050,6 +5051,16 @@ ifeq ($(TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT),)
     OTA_FROM_TARGET_SCRIPT := $(OTA_FROM_TARGET_FILES)
 else
     OTA_FROM_TARGET_SCRIPT := $(TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT)
+endif
+
+ifndef ANDROID_COMPILE_WITH_BROTLI
+    ANDROID_COMPILE_WITH_BROTLI := true
+endif
+
+ifeq ($(ANDROID_COMPILE_WITH_BROTLI),true)
+    $(INTERNAL_OTA_PACKAGE_TARGET): brotli := true
+else
+    $(INTERNAL_OTA_PACKAGE_TARGET): brotli := false
 endif
 
 ifneq ($(TARGET_SETS_FSTAB),)
