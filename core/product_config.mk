@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2008 The Android Open Source Project
 #
@@ -178,6 +179,7 @@ include $(BUILD_SYSTEM)/device.mk
 # A XPerience build needs only the XPerience product makefiles.
 ifneq ($(XPERIENCE_BUILD),)
   all_product_configs := $(shell find device -path "*/$(XPERIENCE_BUILD)/xperience.mk")
+  all_product_configs += $(wildcard vendor/xperience/build/target/product/xperience_$(XPERIENCE_BUILD).mk)
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
