@@ -548,6 +548,22 @@ function add_lunch_combo()
     LUNCH_MENU_CHOICES=(${LUNCH_MENU_CHOICES[@]} $new_combo)
 }
 
+function print_xperience_logo()
+{
+	echo -e ${CL_RED}" "
+	echo -e ${CL_RED}" "
+	echo -e ${CL_RED}"  ▀████    ▐████▀    ▄███████▄    ▄████████    ▄████████  ▄█     ▄████████ ███▄▄▄▄    ▄████████    ▄████████"${CL_RST}
+	echo -e ${CL_RED}"    ███▌   ████▀    ███    ███   ███    ███   ███    ███ ███    ███    ███ ███▀▀▀██▄ ███    ███   ███    ███"${CL_RST}
+	echo -e ${CL_RED}"     ███  ▐███      ███    ███   ███    █▀    ███    ███ ███▌   ███    █▀  ███   ███ ███    █▀    ███    █▀ "${CL_RST}
+	echo -e ${CL_RED}"     ▀███▄███▀      ███    ███  ▄███▄▄▄      ▄███▄▄▄▄██▀ ███▌  ▄███▄▄▄     ███   ███ ███         ▄███▄▄▄    "${CL_RST}
+	echo -e ${CL_RED}"     ████▀██▄     ▀█████████▀  ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   ███▌ ▀▀███▀▀▀     ███   ███ ███        ▀▀███▀▀▀    "${CL_RST}
+	echo -e ${CL_RED}"    ▐███  ▀███      ███          ███    █▄  ▀███████████ ███    ███    █▄  ███   ███ ███    █▄    ███    █▄ "${CL_RST}
+	echo -e ${CL_RED}"   ▄███     ███▄    ███          ███    ███   ███    ███ ███    ███    ███ ███   ███ ███    ███   ███    ███"${CL_RST}
+	echo -e ${CL_RED}"  ████       ███▄  ▄████▀        ██████████   ███    ███ █▀     ██████████  ▀█   █▀  ████████▀    ██████████"${CL_RST}
+	echo -e ${CL_RED}"                                              ███    ███                                                    "${CL_RST}
+	echo -e ${CL_RED}" "${CL_RST}
+}
+
 # add the default one here
 add_lunch_combo aosp_arm-eng
 add_lunch_combo aosp_arm64-eng
@@ -556,23 +572,53 @@ add_lunch_combo aosp_mips64-eng
 add_lunch_combo aosp_x86-eng
 add_lunch_combo aosp_x86_64-eng
 
+#function print_lunch_menu()
+#{
+#    print_xperience_logo
+#    local uname=$(uname)
+#   echo
+#   echo "You're building on" $uname
+#   echo
+#   echo "Lunch menu... pick a combo:"
+#
+#   local i=1
+#   local choice
+#   for choice in ${LUNCH_MENU_CHOICES[@]}
+#   do
+#       echo "     $i. $choice"
+#       i=$(($i+1))
+#   done
+#
+#   echo
+#}
+
+#Custom lunch menu
 function print_lunch_menu()
 {
-    local uname=$(uname)
-    echo
-    echo "You're building on" $uname
-    echo
-    echo "Lunch menu... pick a combo:"
+   #print our logo
+   print_xperience_logo
 
-    local i=1
-    local choice
-    for choice in ${LUNCH_MENU_CHOICES[@]}
-    do
-        echo "     $i. $choice"
-        i=$(($i+1))
-    done
+   #read the distribution used
+   local distro=$(uname)
 
-    echo
+   echo 
+   echo " You're building using " $distro
+   echo 
+    if [ "z${XPE_DEVICES_ONLY}" != "z" ]; then
+       echo "Breakfast menu... pick a combo:"
+    else
+       echo "Lunch menu... pick a combo:"
+    fi
+
+   local i=1
+   local choice
+   for choice in ${LUNCH_MENU_CHOICES[@]}
+   do
+       echo "     $i. $choice"
+       i=$(($i+1))
+   done | column #separate with columns
+
+   echo
 }
 
 function lunch()
@@ -583,7 +629,7 @@ function lunch()
         answer=$1
     else
         print_lunch_menu
-        echo -n "Which would you like? [aosp_arm-eng] "
+        echo -n "Which would you like? [select 1 number] "
         read answer
     fi
 
