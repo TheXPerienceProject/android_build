@@ -529,21 +529,21 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if GetBuildProp("ro.xpe.model", OPTIONS.info_dict) is not None:
     model = GetBuildProp("ro.xpe.model", OPTIONS.info_dict)
     script.Print("#   Software Channel: %s               #"%(channel));
-    script.Print("#   Android ID: %s                    #"%(buildid));
-    script.Print("#   XPerience Version: %s        #"%(displayv));
+    script.Print("#   Android ID: %s              #"%(buildid));
+    script.Print("#   XPerience Version: %s       #"%(displayv));
     script.Print("#   Android Version: %s                   #"%(androidv));
     script.Print("#   Android Security: %s             #"%(secure));
-    script.Print("#   Product Name: %s                   #"%(product));
+    script.Print("#   Product Name: %s            #"%(product));
     script.Print("#   Device Name: %s (%s)           #"%(model, device));
     script.Print("#   Brand: %s                          #"%(brand));
     script.Print("##############################################");
   else:
     script.Print("#   Software Channel: %s               #"%(channel));
-    script.Print("#   Android ID: %s                      #"%(buildid));
-    script.Print("#   XPerience Version: %s      #"%(displayv));
+    script.Print("#   Android ID: %s              #"%(buildid));
+    script.Print("#   XPerience Version: %s       #"%(displayv));
     script.Print("#   Android Version: %s                   #"%(androidv));
     script.Print("#   Android Security: %s             #"%(secure));
-    script.Print("#   Product Name: %s              #"%(product));
+    script.Print("#   Product Name: %s            #"%(product));
     script.Print("#   Device Name: %s (%s)            #"%(model, device));
     script.Print("#   Brand: %s                          #"%(brand));
     script.Print("##############################################");
