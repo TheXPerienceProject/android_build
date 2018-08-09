@@ -138,12 +138,12 @@ function check_product()
         return
     fi
     if (echo -n $1 | grep -q -e "^xperience_") ; then
-        XPERIENCE_BUILD=$(echo -n $1 | sed -e 's/^xperience_//g')
-        export BUILD_NUMBER=$( (date +%s%N ; echo $XPERIENCE_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
+        XPE_BUILD=$(echo -n $1 | sed -e 's/^xperience_//g')
+        export BUILD_NUMBER=$( (date +%s%N ; echo $XPE_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
     else
-        XPERIENCE_BUILD=
+        XPE_BUILD=
     fi
-    export XPERIENCE_BUILD
+    export XPE_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
