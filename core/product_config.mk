@@ -177,9 +177,9 @@ include $(BUILD_SYSTEM)/product.mk
 include $(BUILD_SYSTEM)/device.mk
 
 # A XPerience build needs only the XPerience product makefiles.
-ifneq ($(XPERIENCE_BUILD),)
-  all_product_configs := $(shell find device -path "*/$(XPERIENCE_BUILD)/xperience.mk")
-  all_product_configs += $(wildcard vendor/xperience/build/target/product/xperience_$(XPERIENCE_BUILD).mk)
+ifneq ($(XPE_BUILD),)
+  all_product_configs := $(shell find device -path "*/$(XPE_BUILD)/xperience.mk")
+  all_product_configs += $(wildcard vendor/xperience/build/target/product/xperience_$(XPE_BUILD).mk)
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
@@ -190,9 +190,9 @@ else
   # files in the tree.
   all_product_configs := $(get-all-product-makefiles)
   endif # TARGET_BUILD_APPS
-endif # XPERIENCE_BUILD
+endif # XPE_BUILD
 
-ifeq ($(XPERIENCE_BUILD),)
+ifeq ($(XPE_BUILD),)
 all_named_products :=
 
 # Find the product config makefile for the current product.
