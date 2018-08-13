@@ -1101,4 +1101,10 @@ ifneq ($(XPE_BUILD),)
 -include $(TOPDIR)vendor/*/build/core/config.mk
 endif
 
+# Rules for QCOM targets
+-include $(TOPDIR)vendor/xperience/build/core/qcom_target.mk
+
+# Rules for MTK targets
+-include $(TOPDIR)vendor/xperience/build/core/mtk_target.mk
+
 include $(BUILD_SYSTEM)/dumpvar.mk
