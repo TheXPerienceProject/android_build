@@ -1251,4 +1251,10 @@ endif
 # Include any vendor specific config.mk file
 -include vendor/*/build/core/config.mk
 
+# Rules for QCOM targets
+-include $(TOPDIR)vendor/xperience/build/core/qcom_target.mk
+
+# Rules for MTK targets
+-include $(TOPDIR)vendor/xperience/build/core/mtk_target.mk
+
 include $(BUILD_SYSTEM)/dumpvar.mk
