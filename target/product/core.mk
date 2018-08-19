@@ -24,7 +24,6 @@ PRODUCT_PACKAGES += \
     BasicDreams \
     BlockedNumberProvider \
     BookmarkProvider \
-    Browser2 \
     BuiltInPrintService \
     Calendar \
     CalendarProvider \
@@ -49,7 +48,6 @@ PRODUCT_PACKAGES += \
     PrintSpooler \
     PrintRecommendationService \
     ProxyHandler \
-    QuickSearchBox \
     SecureElement \
     Settings \
     SettingsIntelligence \
