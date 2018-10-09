@@ -3242,7 +3242,7 @@ endif
 ##
 ## $(1): path to validate
 define try-validate-path-is-subdir
-$(strip
+$(strip 
     $(if $(filter /%,$(1)),
         $(1) starts with a slash
     )
