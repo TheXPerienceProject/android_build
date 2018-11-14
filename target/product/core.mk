@@ -25,15 +25,12 @@ PRODUCT_PACKAGES += \
     BlockedNumberProvider \
     BookmarkProvider \
     BuiltInPrintService \
-    Calendar \
-    CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
     Contacts \
     DeskClock \
     DocumentsUI \
     DownloadProviderUi \
-    Email \
     ExactCalculator \
     ExternalStorageProvider \
     FusedLocation \
