@@ -22,7 +22,7 @@ PRODUCT_PACKAGES := \
 	CustomLocale \
 	Development \
 	Dialer \
-	Launcher3QuickStep \
+	NightfallQuickStep \
 	Camera2 \
 	librs_jni \
 	LiveWallpapersPicker \
