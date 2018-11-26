@@ -25,6 +25,7 @@ PRODUCT_PACKAGES += \
     BlockedNumberProvider \
     BookmarkProvider \
     BuiltInPrintService \
+    CalendarProvider \
     CaptivePortalLogin \
     CertInstaller \
     Contacts \

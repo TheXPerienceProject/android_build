@@ -22,7 +22,6 @@ PRODUCT_PACKAGES := \
 	CustomLocale \
 	Development \
 	Dialer \
-	Gallery2 \
 	Launcher3QuickStep \
 	Camera2 \
 	librs_jni \
@@ -33,6 +32,7 @@ PRODUCT_PACKAGES := \
 	rild \
 	screenrecord \
 	SdkSetup \
+        SnapdragonGallery \
 	SoftKeyboard \
 	sqlite3 \
 	SystemUI \
