@@ -21,7 +21,7 @@ PRODUCT_PACKAGES := \
     Bluetooth \
     BluetoothMidiService \
     Camera2 \
-    Gallery2 \
+    SnapdragonGallery \
     Music \
     MusicFX \
     OneTimeInitializer \
