@@ -865,14 +865,12 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
 
   if OPTIONS.backuptool:
+    is_system_as_root = script.fstab["/system"].mount_point == "/"
     if is_system_as_root:
-      script.fstab["/system"].mount_point = system_mount_point
+      script.fstab["/system"].mount_point = "/system"
     script.Mount("/system")
-    if is_system_as_root and common.system_as_system:
-      script.RunBackup("backup", "/system/system")
-    else:
-      script.RunBackup("backup", "/system")
-    script.Unmount(system_mount_point)
+    script.RunBackup("backup", "/system/system" if is_system_as_root else "/system")
+    script.Unmount("/system")
     if is_system_as_root:
       script.fstab["/system"].mount_point = "/"
 
@@ -919,20 +917,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
+    is_system_as_root = script.fstab["/system"].mount_point == "/"
     if is_system_as_root:
-      script.fstab["/system"].mount_point = system_mount_point
+      script.fstab["/system"].mount_point = "/system"
     script.Mount("/system")
-    if is_system_as_root and common.system_as_system:
-      script.RunBackup("restore", "/system/system")
-    else:
-      script.RunBackup("restore", "/system")
-    script.Unmount(system_mount_point)
+    script.RunBackup("restore", "/system/system" if is_system_as_root else "/system")
+    script.RunCleanCache()
+    script.Unmount("/system")
     if is_system_as_root:
       script.fstab["/system"].mount_point = "/"
-
-  script.Mount("/system")
-  script.RunCleanCache()
-  script.Unmount("/system")
 
   script.Print(" ")
   script.Print("Flashing Kernel..")
