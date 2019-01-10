@@ -382,7 +382,6 @@ _product_stash_var_list += \
 define readonly-product-vars
 $(foreach v,$(_product_stash_var_list), \
 	$(eval $(v) ?=) \
-	$(eval .KATI_READONLY := $(v)) \
  )
 endef
 
