@@ -491,6 +491,7 @@ ifeq ($(TARGET_COPY_OUT_VENDOR),system)
 	        PRODUCT_MANUFACTURER="$(PRODUCT_MANUFACTURER)" \
 	        TARGET_BOOTLOADER_BOARD_NAME="$(TARGET_BOOTLOADER_BOARD_NAME)" \
 	        TARGET_BOARD_PLATFORM="$(TARGET_BOARD_PLATFORM)" \
+	        $(PRODUCT_BUILD_PROP_OVERRIDES) \
 	        bash $(VENDOR_BUILDINFO_SH) >> $@
 endif
 	$(hide) $(foreach file,$(system_prop_file), \
