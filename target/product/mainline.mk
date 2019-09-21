@@ -33,6 +33,7 @@ endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.android.dataroaming=true \
+
 endif
 
 PRODUCT_PACKAGES += \
