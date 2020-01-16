@@ -748,6 +748,8 @@ $(call add-clean-step, rm -rf $(HOST_OUT)/framework/vts10-tradefed.jar)
 $(call add-clean-step, rm -rf $(HOST_OUT)/vts/*)
 $(call add-clean-step, rm -rf $(HOST_OUT)/framework/vts-tradefed.jar)
 
+$(call add-clean-step, rm -rf $(TARGET_RECOVERY_ROOT_OUT))
+
 # ************************************************
 # NEWER CLEAN STEPS MUST BE AT THE END OF THE LIST
 # ************************************************
