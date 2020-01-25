@@ -24,6 +24,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_product.mk)
 $(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
 
 ifeq ($(XPERIENCE_BUILD),)
+# GSI doesn't support apex for now.
+# Properties set in product take precedence over those in vendor.
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.apex.updatable=false
+
 # Additional settings used in all AOSP builds
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.config.ringtone=Ring_Synth_04.ogg \
