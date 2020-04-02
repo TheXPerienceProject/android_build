@@ -41,8 +41,13 @@ PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += \
 #   1. 64-bit primary, 32-bit secondary OR
 #   2. 32-bit primary, 64-bit secondary
 # init.zygote64_32.rc is in the core_64_bit.mk below
+ifneq ($(BOARD_SYSTEMIMAGE_AS_SYSTEM), true)
 PRODUCT_COPY_FILES += \
     system/core/rootdir/init.zygote32_64.rc:root/init.zygote32_64.rc
+else
+PRODUCT_COPY_FILES += \
+    system/core/rootdir/init.zygote32_64_SaS.rc:root/init.zygote32_64.rc
+endif
 
 PRODUCT_NAME := aosp_arm64_ab
 PRODUCT_DEVICE := generic_arm64_ab

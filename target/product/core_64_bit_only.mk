@@ -20,7 +20,11 @@
 # to core_minimal.mk.
 
 # Copy the 64-bit zygote startup script
+ifneq ($(BOARD_SYSTEMIMAGE_AS_SYSTEM), true)
 PRODUCT_COPY_FILES += system/core/rootdir/init.zygote64.rc:root/init.zygote64.rc
+else
+PRODUCT_COPY_FILES += system/core/rootdir/init.zygote64_SaS.rc:root/init.zygote64.rc
+endif
 
 # Set the zygote property to select the 64-bit script.
 # This line must be parsed before the one in core_minimal.mk
