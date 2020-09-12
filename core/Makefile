@@ -4449,6 +4449,9 @@ endif
 ifeq ($(TARGET_NOT_USE_GZIP_RECOVERY_RAMDISK),true)
 	$(hide) echo "no_gzip_recovery_ramdisk=true" >> $@
 endif
+ifdef BUILDING_VENDOR_IMAGE
+	$(hide) echo "board_builds_vendorimage=true" >> $@
+endif
 ifdef BOARD_USES_VENDORIMAGE
 	$(hide) echo "board_uses_vendorimage=true" >> $@
 endif
