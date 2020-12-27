@@ -53,5 +53,6 @@ if [ -n "$BUILD_THUMBPRINT" ] ; then
 fi
 
 echo "ro.xperience.device=$XPERIENCE_DEVICE"
+echo "ro.xpe.device=$XPERIENCE_DEVICE"
 
 echo "# end build properties"
