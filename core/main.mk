@@ -374,7 +374,7 @@ endif
 
 # ------------------------------------------------------------
 # Include vendor specific additions to build properties
--include vendor/carbon/build/core/main.mk
+-include vendor/xperience/build/core/main.mk
 
 # ------------------------------------------------------------
 # Define a function that, given a list of module tags, returns
