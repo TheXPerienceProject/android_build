@@ -454,7 +454,7 @@ endif
 	$(hide) TARGET_BUILD_TYPE="$(TARGET_BUILD_VARIANT)" \
 	        TARGET_BUILD_FLAVOR="$(TARGET_BUILD_FLAVOR)" \
 	        TARGET_DEVICE="$(TARGET_DEVICE)" \
-	        CARBON_DEVICE="$(TARGET_DEVICE)" \
+	        XPERIENCE_DEVICE="$(TARGET_DEVICE)" \
 	        PRODUCT_DEFAULT_LOCALE="$(call get-default-product-locale,$(PRODUCT_LOCALES))" \
 	        PRODUCT_DEFAULT_WIFI_CHANNELS="$(PRODUCT_DEFAULT_WIFI_CHANNELS)" \
 	        PRIVATE_BUILD_DESC="$(PRIVATE_BUILD_DESC)" \
@@ -5071,10 +5071,10 @@ ifeq (true,$(PRODUCT_USE_DYNAMIC_PARTITIONS))
 	$(call dump-dynamic-partitions-info, $(zip_root)/META/dynamic_partitions_info.txt)
 endif
 
-# Export signing properties on Carbon Builds
-ifneq ($(CARBON_BUILD),)
+# Export signing properties on XPERIENCE Builds
+ifneq ($(XPERIENCE_BUILD),)
 	$(shell echo "TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT=$(TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT)" >> $(PRODUCT_OUT)/signing.props)
-	$(shell echo "CARBON_VERSION=$(CARBON_VERSION)" >> $(PRODUCT_OUT)/signing.props)
+	$(shell echo "XPERIENCE_VERSION=$(XPERIENCE_VERSION)" >> $(PRODUCT_OUT)/signing.props)
 	$(shell echo "TARGET_RELEASETOOL_OTA_FROM_TARGET_ADDITIONAL_ARGS=$(TARGET_RELEASETOOL_OTA_FROM_TARGET_ADDITIONAL_ARGS)" >> $(PRODUCT_OUT)/signing.props)
 endif
 
@@ -5165,7 +5165,7 @@ else
     OTA_SCRIPT_OVERRIDE_DEVICE := $(TARGET_OTA_ASSERT_DEVICE)
 endif
 
-ifneq ($(CARBON_BUILD),)
+ifneq ($(XPERIENCE_BUILD),)
     OTA_SCRIPT_BACKUPTOOL := true
 else
     OTA_SCRIPT_BACKUPTOOL := false

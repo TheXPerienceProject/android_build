@@ -37,7 +37,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 
 EOF
 
-    __print_carbon_functions_help
+    __print_xperience_functions_help
 
 cat <<EOF
 
@@ -50,7 +50,7 @@ EOF
     local T=$(gettop)
     local A=""
     local i
-    for i in `cat $T/build/envsetup.sh $T/vendor/carbon/build/envsetup.sh | sed -n "/^[[:blank:]]*function /s/function \([a-z_]*\).*/\1/p" | sort | uniq`; do
+    for i in `cat $T/build/envsetup.sh $T/vendor/xperience/build/envsetup.sh | sed -n "/^[[:blank:]]*function /s/function \([a-z_]*\).*/\1/p" | sort | uniq`; do
       A="$A $i"
     done
     echo $A
@@ -61,8 +61,8 @@ function build_build_var_cache()
 {
     local T=$(gettop)
     # Grep out the variable names from the script.
-    cached_vars=(`cat $T/build/envsetup.sh $T/vendor/carbon/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`)
-    cached_abs_vars=(`cat $T/build/envsetup.sh $T/vendor/carbon/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_abs_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`)
+    cached_vars=(`cat $T/build/envsetup.sh $T/vendor/xperience/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`)
+    cached_abs_vars=(`cat $T/build/envsetup.sh $T/vendor/xperience/build/envsetup.sh | tr '()' '  ' | awk '{for(i=1;i<=NF;i++) if($i~/get_abs_build_var/) print $(i+1)}' | sort -u | tr '\n' ' '`)
     # Call the build system to dump the "<val>=<value>" pairs as a shell script.
     build_dicts_script=`\builtin cd $T; build/soong/soong_ui.bash --dumpvars-mode \
                         --vars="${cached_vars[*]}" \
@@ -144,12 +144,12 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
-    if (echo -n $1 | grep -q -e "^carbon_") ; then
-        CARBON_BUILD=$(echo -n $1 | sed -e 's/^carbon_//g')
+    if (echo -n $1 | grep -q -e "^xperience_") ; then
+        XPERIENCE_BUILD=$(echo -n $1 | sed -e 's/^xperience_//g')
     else
-        CARBON_BUILD=
+        XPERIENCE_BUILD=
     fi
-    export CARBON_BUILD
+    export XPERIENCE_BUILD
 
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
@@ -386,7 +386,7 @@ function addcompletions()
       system/core/adb/adb.bash
       system/core/fastboot/fastboot.bash
       tools/asuite/asuite.sh
-      vendor/carbon/bash_completion
+      vendor/xperience/bash_completion
     )
     # Completion can be disabled selectively to allow users to use non-standard completion.
     # e.g.
@@ -666,16 +666,16 @@ function lunch()
     check_product $product
     if [ $? -ne 0 ]
     then
-        # if we can't find a product, try to grab it off the CarbonROM GitHub
+        # if we can't find a product, try to grab it off the XPERIENCE GitHub
         T=$(gettop)
         cd $T > /dev/null
-        vendor/carbon/build/tools/roomservice.py $product
+        vendor/xperience/build/tools/roomservice.py $product
         cd - > /dev/null
         check_product $product
     else
         T=$(gettop)
         cd $T > /dev/null
-        vendor/carbon/build/tools/roomservice.py $product true
+        vendor/xperience/build/tools/roomservice.py $product true
         cd - > /dev/null
     fi
 
@@ -1646,4 +1646,4 @@ addcompletions
 
 export ANDROID_BUILD_TOP=$(gettop)
 
-. $ANDROID_BUILD_TOP/vendor/carbon/build/envsetup.sh
+. $ANDROID_BUILD_TOP/vendor/xperience/build/envsetup.sh
