@@ -1234,9 +1234,11 @@ dont_bother_goals := out \
 
 
 ifneq ($(XPERIENCE_BUILD),)
+ifneq ($(wildcard device/xperience/sepolicy/common/sepolicy.mk),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
 $(eval include device/xperience/sepolicy/common/sepolicy.mk)
+endif
 endif
 
 ifeq ($(CALLED_FROM_SETUP),true)
