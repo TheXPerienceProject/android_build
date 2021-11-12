@@ -220,6 +220,42 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # Dump fingerprints
   script.Print("Target: {}".format(target_info.fingerprint))
 
+  android_version = target_info.GetBuildProp("ro.build.version.release")
+  xperience_version = target_info.GetBuildProp("ro.xperience.build.version")
+  build_id = target_info.GetBuildProp("ro.build.id")
+  build_date = target_info.GetBuildProp("ro.build.date")
+  security_patch = target_info.GetBuildProp("ro.build.version.security_patch")
+  device = target_info.GetBuildProp("ro.xpe.device")
+  device_status = target_info.GetBuildProp("ro.xpe.channeltype")
+  model = target_info.GetBuildProp("ro.product.model")
+  branchS = target_info.GetBuildProp("ro.qcom.system")
+  branchV = target_info.GetBuildProp("ro.qcom.vendor")
+
+  script.Print("----------------------------------------------");
+  script.Print("      ) (       (   (          )             ");
+  script.Print("   ( /( )\ )    )\ ))\ )    ( /(   (         ");
+  script.Print("   )\()|()/((  (()/(()/((   )\())  )\   (    ");
+  script.Print("  ((_)\ /(_))\  /(_))(_))\ ((_)\ (((_)_( )\  ");
+  script.Print("  (__((_|_))((_)(_))(_))((_) _((_))\___((_)  ");
+  script.Print("  \ \/ / _ \ __| _ \_ _| __| \| ((/ __| __|  ");
+  script.Print("   >  <|  _/ _||   /| || _|| .` || (__| _|   ");
+  script.Print("  /_/\_\_| |___|_|_\___|___|_|\_| \___|___|  ");
+  script.Print("     (C)2011-2021 The XPerience Project      ");
+  script.Print("           By Carlos 'Klozz' Jesus           ");
+  script.Print("           TeamMEX@xda-developers            ");
+  script.Print("----------------------------------------------");
+  script.Print(" Android version: %s"%(android_version));
+  script.Print(" XPerience version: %s"%(xperience_version));
+  script.Print(" Build id: %s"%(build_id));
+  script.Print(" Build date: %s"%(build_date));
+  script.Print(" Security patch: %s"%(security_patch));
+  script.Print(" CAF QSSI Version: %s"%(branchS));
+  script.Print(" CAF Vendor Version: %s"%(branchV));
+  script.Print(" Device: %s"%(device));
+  script.Print(" Model: %s"%(model));
+  script.Print(" Device Status: %s"%(device_status));
+  script.Print("----------------------------------------------");
+
   device_specific.FullOTA_InstallBegin()
 
   CopyInstallTools(output_zip)
