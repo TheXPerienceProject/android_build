@@ -359,6 +359,7 @@ include $(BUILD_SYSTEM)/envsetup.mk
 FIND_LEAVES_EXCLUDES := $(addprefix --prune=, $(SCAN_EXCLUDE_DIRS) .repo .git)
 
 -include vendor/extra/BoardConfigExtra.mk
+
 ifneq ($(XPERIENCE_BUILD),)
 include vendor/xperience/config/BoardConfigXPerience.mk
 endif
@@ -1293,3 +1294,5 @@ DEFAULT_DATA_OUT_MODULES := ltp $(ltp_packages) $(kselftest_modules)
 
 # Include any vendor specific config.mk file
 -include vendor/*/build/core/config.mk
+
+include $(BUILD_SYSTEM)/dumpvar.mk
