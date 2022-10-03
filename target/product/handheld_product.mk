@@ -32,5 +32,10 @@ PRODUCT_PACKAGES += \
     SettingsIntelligence \
     frameworks-base-overlays
 
+ifeq ($(XPERIENCE_BUILD),)
+PRODUCT_PACKAGES += \
+    Camera2
+endif
+
 PRODUCT_PACKAGES_DEBUG += \
     frameworks-base-overlays-debug
