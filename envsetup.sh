@@ -2170,5 +2170,5 @@ source_vendorsetup
 addcompletions
 
 #export ANDROID_BUILD_TOP=$(gettop)
-
-. $ANDROID_BUILD_TOP/vendor/xperience/build/envsetup.sh
+export XPE_TOP=$(gettop)
+. $XPE_TOP/vendor/xperience/build/envsetup.sh
