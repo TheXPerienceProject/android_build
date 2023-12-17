@@ -2105,6 +2105,7 @@ set_global_paths
 source_vendorsetup
 addcompletions
 
-#export ANDROID_BUILD_TOP=$(gettop)
+export ANDROID_BUILD_TOP=$(gettop)
 export XPE_TOP=$(gettop)
+
 . $XPE_TOP/vendor/xperience/build/envsetup.sh
