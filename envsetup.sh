@@ -2184,7 +2184,8 @@ if [ -z ${CCACHE_EXEC} ]; then
         echo -e "ccache not found installed!"
     fi
 fi
-
+export SELINUX_IGNORE_NEVERALLOWS=true
+export SELINUX_IGNORE_NEVERALLOWS_ON_USER=true
 export ANDROID_BUILD_TOP=$(gettop)
 export XPE_TOP=$(gettop)
 
