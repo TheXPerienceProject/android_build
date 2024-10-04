@@ -1224,4 +1224,5 @@ fi
 
 export ANDROID_BUILD_TOP=$(gettop)
 
+source ${ANDROID_BUILD_TOP}/vendor/xperience/vars/aosp_target_release
 . $ANDROID_BUILD_TOP/vendor/xperience/build/envsetup.sh
