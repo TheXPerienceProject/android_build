@@ -515,6 +515,13 @@ function lunch()
 
 function _lunch_meat()
 {
+    if (echo -n $1 | grep -q -e "^xperience_") ; then
+        XPERIENCE_BUILD=$(echo -n $1 | sed -e 's/^xperience_//g')
+    else
+        XPERIENCE_BUILD=
+    fi
+    export XPERIENCE_BUILD
+
     local product=$1
     local release=$2
     local variant=$3
