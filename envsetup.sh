@@ -501,8 +501,8 @@ function lunch()
 
 function _lunch_meat()
 {
-    if (echo -n $1 | grep -q -e "^xpe_") ; then
-        XPERIENCE_BUILD=$(echo -n $1 | sed -e 's/^xpe_//g')
+    if (echo -n $1 | grep -q -e "^xperience_") ; then
+        XPERIENCE_BUILD=$(echo -n $1 | sed -e 's/^xperience_//g')
     else
         XPERIENCE_BUILD=
     fi
