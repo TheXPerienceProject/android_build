@@ -1146,26 +1146,52 @@ addcompletions
 
 # check and set ccache path on envsetup
 if [ -z "${CCACHE_EXEC}" ]; then
+
     if command -v ccache &>/dev/null; then
+
         export USE_CCACHE=1
         export CCACHE_EXEC=$(command -v ccache)
+
+        # Check for root-level cache.txt file relative to build/make/envsetup.sh
+        ROOT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../.."
+        CACHE_CONFIG_FILE="${ROOT_DIR}/cache.txt"
+
+        if [ -f "${CACHE_CONFIG_FILE}" ]; then
+            CUSTOM_CACHE_DIR=$(cat "${CACHE_CONFIG_FILE}" | tr -d '\r\n')
+            if [ -n "${CUSTOM_CACHE_DIR}" ]; then
+                export CCACHE_DIR="${CUSTOM_CACHE_DIR}"
+                echo "Using custom CCACHE_DIR from cache.txt: ${CCACHE_DIR}" >&2
+            fi
+        fi
+
         [ -z "${CCACHE_DIR}" ] && export CCACHE_DIR="$HOME/.ccache"
+
+        # Create CCACHE_DIR if it doesn't exist
+        if [ ! -d "${CCACHE_DIR}" ]; then
+            mkdir -p "${CCACHE_DIR}" && echo "Created CCACHE_DIR at: ${CCACHE_DIR}" >&2
+        fi
+
         echo "ccache directory found, CCACHE_DIR set to: $CCACHE_DIR" >&2
+
         CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-40G}"
         DIRECT_MODE="${DIRECT_MODE:-false}"
+
         $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
             && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2 \
             || echo "Warning: Could not set cache size limit. Please check ccache configuration." >&2
+
         CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
         if [ -n "$CURRENT_CCACHE_SIZE" ]; then
             echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2
         else
             echo "No cached files in ccache." >&2
         fi
+
     else
         echo "Error: ccache not found. Please install ccache." >&2
     fi
 fi
+
 
 export ANDROID_BUILD_TOP=$(gettop)
 
