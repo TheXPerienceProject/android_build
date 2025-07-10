@@ -275,6 +275,29 @@ def CheckVintf(inp, info_dict=None):
 
   raise ValueError('{} is not a valid directory or zip file'.format(inp))
 
+def debug_manifest_klzz(target_files):
+    manifest_path_debug = os.path.join(target_files, "META", "vintf", "manifest.xml")
+
+    kernel_version_path = os.path.join(target_files, "META", "kernel_version.txt")
+    kernel_version = "<unknown>"
+    try:
+        with open(kernel_version_path, 'r') as f:
+            kernel_version = f.read().strip()
+    except Exception:
+        kernel_version = "<not found>"
+
+    print("Manifest path: ", manifest_path_debug)
+    print("Kernel version found: ", kernel_version)
+    print("Target Level declared in manifest:")
+    try:
+        with open(manifest_path_debug, 'r') as f:
+            for line in f:
+                if "<kernel target-level=" in line:
+                    print(line.strip())
+    except Exception as e:
+        print("Error reading manifest file:", e)
+    print("======================================")
+
 def CheckVintfIfTrebleEnabled(target_files, target_info):
   """Checks compatibility info of the input target files.
 
@@ -300,7 +323,13 @@ def CheckVintfIfTrebleEnabled(target_files, target_info):
     return
 
   if not CheckVintf(target_files, target_info):
-    raise RuntimeError("VINTF compatibility check failed")
+    try:
+        if not CheckVintf(target_files, target_info):
+            debug_manifest_klzz(target_files)
+            raise RuntimeError("VINTF compatibility check failed")
+    except Exception as e:
+        debug_manifest_klzz(target_files)
+        raise
 
 def HasTrebleEnabled(target_files, target_info):
   def HasVendorPartition(target_files):
