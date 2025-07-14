@@ -134,6 +134,7 @@ PRODUCT_PACKAGES += \
     javax.obex \
     kcmdlinectrl \
     keystore2 \
+    credstore \
     ld.mc \
     libaaudio \
     libalarm_jni \
@@ -210,6 +211,7 @@ PRODUCT_PACKAGES += \
     libvulkan \
     libwilhelm \
     linker \
+    llkd \
     llndk_libs \
     lmkd \
     LocalTransport \
@@ -225,8 +227,6 @@ PRODUCT_PACKAGES += \
     media_profiles_V1_0.dtd \
     MediaProviderLegacy \
     mediaserver \
-    mediaserver64 \
-    mediaserverwrapper \
     mke2fs \
     mkfs.erofs \
     monkey \
@@ -264,6 +264,7 @@ PRODUCT_PACKAGES += \
     screencap \
     sdcard \
     secdiscard \
+    SecureElement \
     selinux_policy_system \
     sensorservice \
     service \
