@@ -1229,8 +1229,18 @@ source_vendorsetup
 addcompletions
 
 # Check for root-level cache.txt file relative to build/make/envsetup.sh
-ROOT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../.."
+# Detects the script path in a manner compatible with Bash and Zsh.
+if [ -n "${BASH_SOURCE[0]}" ]; then
+    # We are in Bash
+    SCRIPT_PATH="${BASH_SOURCE[0]}"
+else
+    # We assume that we are in Zsh.
+    SCRIPT_PATH="$0"
+fi
+ROOT_DIR="$(dirname "$(realpath "${SCRIPT_PATH}")")/../.."
 CACHE_CONFIG_FILE="${ROOT_DIR}/cache.txt"
+
+#echo "DEBUG: The script thinks that the root is: ${ROOT_DIR}"
 
 # Always set CCACHE_DIR from cache.txt if it exists
 if [ -f "${CACHE_CONFIG_FILE}" ]; then
