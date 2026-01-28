@@ -647,7 +647,7 @@ function _lunch_store_leftovers()
     echo "$product $release $variant" > $dot_leftovers
 }
 
-function lunch2()
+function lunch()
 {
     if [[ $# -eq 1 && $1 = "--help" ]]; then
         _lunch_usage
