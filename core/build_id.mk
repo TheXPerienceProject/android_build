@@ -18,5 +18,4 @@
 # (like "CRB01").  It must be a single word, and is
 # capitalized by convention.
 
-BUILD_ID=BQ2A.251105.001
-BUILD_ID:=${BUILD_ID}-BP2A.250805.005
+BUILD_ID=BP4A.251205.006
