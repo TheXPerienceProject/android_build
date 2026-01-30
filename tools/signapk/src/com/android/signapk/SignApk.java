@@ -1145,7 +1145,7 @@ class SignApk {
             } else if ("--enable-v4".equals(args[argstart])) {
                 signUsingApkSignatureSchemeV4 = true;
                 ++argstart;
-            } else if ("--lineage".equals(args[argstart])) {
+            } else if ("--xperience".equals(args[argstart])) {
                 File lineageFile = new File(args[++argstart]);
                 try {
                     certLineage = SigningCertificateLineage.readFromFile(lineageFile);

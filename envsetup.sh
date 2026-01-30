@@ -54,8 +54,8 @@ function build_build_var_cache()
     local T=$(gettop)
     local one_true_awk=$T/prebuilts/build-tools/$(get_host_prebuilt_prefix)/bin/one-true-awk
     # Grep out the variable names from the script.
-    cached_vars=(`cat $T/build/envsetup.sh $T/vendor/lineage/build/envsetup.sh | tr '()' '  ' | $one_true_awk '{for(i=1;i<=NF;i++) if($i~/_get_build_var_cached/) print $(i+1)}' | sort -u | tr '\n' ' '`)
-    cached_abs_vars=(`cat $T/build/envsetup.sh $T/vendor/lineage/build/envsetup.sh | tr '()' '  ' | $one_true_awk '{for(i=1;i<=NF;i++) if($i~/_get_abs_build_var_cached/) print $(i+1)}' | sort -u | tr '\n' ' '`)
+    cached_vars=(`cat $T/build/envsetup.sh $T/vendor/xperience/build/envsetup.sh | tr '()' '  ' | $one_true_awk '{for(i=1;i<=NF;i++) if($i~/_get_build_var_cached/) print $(i+1)}' | sort -u | tr '\n' ' '`)
+    cached_abs_vars=(`cat $T/build/envsetup.sh $T/vendor/xperience/build/envsetup.sh | tr '()' '  ' | $one_true_awk '{for(i=1;i<=NF;i++) if($i~/_get_abs_build_var_cached/) print $(i+1)}' | sort -u | tr '\n' ' '`)
     # Call the build system to dump the "<val>=<value>" pairs as a shell script.
     build_dicts_script=`\builtin cd $T; build/soong/soong_ui.bash --dumpvars-mode \
                         --vars="${cached_vars[*]}" \
@@ -496,7 +496,7 @@ function _lunch_meat()
     set_stuff_for_environment
     [[ -n "${ANDROID_QUIET_BUILD:-}" ]] || printconfig
 
-    if [[ -z "${ANDROID_QUIET_BUILD}" && -z "${LINEAGE_BUILD}" ]]; then
+    if [[ -z "${ANDROID_QUIET_BUILD}" && -z "${XPERIENCE_BUILD}" ]]; then
         local spam_for_lunch=$(gettop)/build/make/tools/envsetup/spam_for_lunch
         if [[ -x $spam_for_lunch ]]; then
             $spam_for_lunch
@@ -614,13 +614,13 @@ function lunch()
         # if we can't find a product, try to grab it off the LineageOS GitHub
         T=$(gettop)
         cd $T > /dev/null
-        vendor/lineage/build/tools/roomservice.py $product
+        vendor/xperience/build/tools/roomservice.py $product
         cd - > /dev/null
         check_product $product $release
     else
         T=$(gettop)
         cd $T > /dev/null
-        vendor/lineage/build/tools/roomservice.py $product true
+        vendor/xperience/build/tools/roomservice.py $product true
         cd - > /dev/null
     fi
 
@@ -1217,10 +1217,60 @@ set_global_paths
 source_vendorsetup
 addcompletions
 
+# Check for root-level cache.txt file relative to build/make/envsetup.sh
+# Detects the script path in a manner compatible with Bash and Zsh.
+if [ -n "${BASH_SOURCE[0]}" ]; then
+    # We are in Bash
+    SCRIPT_PATH="${BASH_SOURCE[0]}"
+else
+    # We assume that we are in Zsh.
+    SCRIPT_PATH="$0"
+fi
+ROOT_DIR="$(dirname "$(realpath "${SCRIPT_PATH}")")/../.."
+CACHE_CONFIG_FILE="${ROOT_DIR}/cache.txt"
+
+#echo "DEBUG: The script thinks that the root is: ${ROOT_DIR}"
+
+# Always set CCACHE_DIR from cache.txt if it exists
+if [ -f "${CACHE_CONFIG_FILE}" ]; then
+    CUSTOM_CACHE_DIR="$(tr -d '\r\n' < "${CACHE_CONFIG_FILE}")"
+    if [ -n "${CUSTOM_CACHE_DIR}" ]; then
+        export CCACHE_DIR="${CUSTOM_CACHE_DIR}"
+        echo "Using custom CCACHE_DIR from cache.txt: ${CCACHE_DIR}" >&2
+    else
+        export CCACHE_DIR="$HOME/.ccache"
+        echo "cache.txt is empty, using default CCACHE_DIR: ${CCACHE_DIR}" >&2
+    fi
+else
+    export CCACHE_DIR="$HOME/.ccache"
+    echo "cache.txt not found, using default CCACHE_DIR: ${CCACHE_DIR}" >&2
+fi
+
+# Ensure the directory exists
+[ ! -d "${CCACHE_DIR}" ] && mkdir -p "${CCACHE_DIR}" && echo "Created CCACHE_DIR at: ${CCACHE_DIR}" >&2
+
+# Configure ccache if available
+if command -v ccache &>/dev/null; then
+    export USE_CCACHE=1
+    [ -z "${CCACHE_EXEC}" ] && export CCACHE_EXEC="$(command -v ccache)"
+
+    CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-40G}"
+    DIRECT_MODE="${DIRECT_MODE:-false}"
+
+    $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
+        && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2
+
+    CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
+    [ -n "$CURRENT_CCACHE_SIZE" ] && echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2 \
+        || echo "No cached files in ccache." >&2
+else
+    echo "Error: ccache not found. Please install ccache." >&2
+fi
+
 if [[ "$USE_LEFTOVERS" -eq 1 ]]; then
   leftovers
 fi
 
 export ANDROID_BUILD_TOP=$(gettop)
 
-. $ANDROID_BUILD_TOP/vendor/lineage/build/envsetup.sh
+. $ANDROID_BUILD_TOP/vendor/xperience/build/envsetup.sh
