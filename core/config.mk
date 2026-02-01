@@ -1372,6 +1372,8 @@ endif
 # when the target-files is signed in a post-build step.
 ifeq ($(TARGET_BUILD_VARIANT),eng)
 BUILD_KEYS := test-keys
+else ifneq ($(filter vendor/xperience-priv/%,$(DEFAULT_SYSTEM_DEV_CERTIFICATE)),)
+BUILD_KEYS := release-keys
 else
 BUILD_KEYS := release-keys
 endif
