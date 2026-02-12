@@ -1312,10 +1312,6 @@ set_global_paths
 source_vendorsetup
 addcompletions
 
-if [[ "$USE_LEFTOVERS" -eq 1 ]]; then
-  leftovers
-fi
-
 # Check for root-level cache.txt file relative to build/make/envsetup.sh
 # Detects the script path in a manner compatible with Bash and Zsh.
 if [ -n "${BASH_SOURCE[0]}" ]; then
@@ -1337,10 +1333,38 @@ if [ -f "${CACHE_CONFIG_FILE}" ]; then
         export CCACHE_DIR="${CUSTOM_CACHE_DIR}"
         echo "Using custom CCACHE_DIR from cache.txt: ${CCACHE_DIR}" >&2
     else
-        echo "Error: ccache not found. Please install ccache." >&2
+        export CCACHE_DIR="$HOME/.ccache"
+        echo "cache.txt is empty, using default CCACHE_DIR: ${CCACHE_DIR}" >&2
     fi
+else
+    export CCACHE_DIR="$HOME/.ccache"
+    echo "cache.txt not found, using default CCACHE_DIR: ${CCACHE_DIR}" >&2
 fi
 
+# Ensure the directory exists
+[ ! -d "${CCACHE_DIR}" ] && mkdir -p "${CCACHE_DIR}" && echo "Created CCACHE_DIR at: ${CCACHE_DIR}" >&2
+
+# Configure ccache if available
+if command -v ccache &>/dev/null; then
+    export USE_CCACHE=1
+    [ -z "${CCACHE_EXEC}" ] && export CCACHE_EXEC="$(command -v ccache)"
+
+    CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-40G}"
+    DIRECT_MODE="${DIRECT_MODE:-false}"
+
+    $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
+        && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2
+
+    CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
+    [ -n "$CURRENT_CCACHE_SIZE" ] && echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2 \
+        || echo "No cached files in ccache." >&2
+else
+    echo "Error: ccache not found. Please install ccache." >&2
+fi
+
+if [[ "$USE_LEFTOVERS" -eq 1 ]]; then
+  leftovers
+fi
 
 export ANDROID_BUILD_TOP=$(gettop)
 
