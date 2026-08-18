@@ -1359,6 +1359,10 @@ endif
 
 include $(BUILD_SYSTEM)/sysprop_config.mk
 
+# Make ANDROID Soong config variables visible to Android.mk files, for
+# consistency with those defined in BoardConfig.mk files.
+include $(BUILD_SYSTEM)/android_soong_config_vars.mk
+
 ifneq ($(XPERIENCE_BUILD),)
 ifneq ($(wildcard device/xperience/sepolicy/common/sepolicy.mk),)
 ## We need to be sure the global selinux policies are included
@@ -1366,10 +1370,6 @@ ifneq ($(wildcard device/xperience/sepolicy/common/sepolicy.mk),)
 $(eval include device/xperience/sepolicy/common/sepolicy.mk)
 endif
 endif
-
-# Make ANDROID Soong config variables visible to Android.mk files, for
-# consistency with those defined in BoardConfig.mk files.
-include $(BUILD_SYSTEM)/android_soong_config_vars.mk
 
 # EMMA_INSTRUMENT is set to true when coverage is enabled. Creates a suffix to
 # differeciate the coverage version of ninja files. This will save 5 minutes of
@@ -1388,6 +1388,9 @@ endif
 
 SOONG_VARIABLES :=
 SOONG_EXTRA_VARIABLES :=
+
+# Include any vendor specific config.mk file
+-include vendor/*/build/core/config.mk
 
 include $(BUILD_SYSTEM)/dumpvar.mk
 
