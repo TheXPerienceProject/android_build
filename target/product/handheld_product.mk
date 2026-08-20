@@ -27,15 +27,15 @@ PRODUCT_PACKAGES += \
     Contacts \
     DeskClock \
     Gallery2 \
+    LatinIME \
     Music \
     preinstalled-packages-platform-handheld-product.xml \
     SettingsIntelligence \
     frameworks-base-overlays
 
-ifeq ($(LINEAGE_BUILD),)
+ifeq ($(XPERIENCE_BUILD),)
 PRODUCT_PACKAGES += \
-    Camera2 \
-    LatinIME
+    Camera2
 endif
 
 PRODUCT_PACKAGES_DEBUG += \

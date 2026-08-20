@@ -1,7 +1,7 @@
 include $(CLEAR_VARS)
 
-enforce_rro_product_name := $(subst lineage_,evolution_,$(PRODUCT_NAME))
-enforce_rro_override_module := $(subst Lineage,Evolution,$(subst lineage,evolution,$(subst lineageos,evolution,$(enforce_rro_source_module))))
+enforce_rro_product_name := $(subst lineage_,xperience_,$(PRODUCT_NAME))
+enforce_rro_override_module := $(subst Lineage,Xperience,$(subst lineage,xperience,$(subst lineageos,xperience,$(enforce_rro_source_module))))
 enforce_rro_module := $(enforce_rro_override_module)__$(enforce_rro_product_name)__auto_generated_rro_$(enforce_rro_partition)
 LOCAL_PACKAGE_NAME := $(enforce_rro_module)
 
