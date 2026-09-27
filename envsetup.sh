@@ -1337,36 +1337,47 @@ CACHE_CONFIG_FILE="${ROOT_DIR}/cache.txt"
 
 # Always set CCACHE_DIR from cache.txt if it exists
 if [ -f "${CACHE_CONFIG_FILE}" ]; then
-    CUSTOM_CACHE_DIR="$(tr -d '\r\n' < "${CACHE_CONFIG_FILE}")"
-    if [ -n "${CUSTOM_CACHE_DIR}" ]; then
-        export CCACHE_DIR="${CUSTOM_CACHE_DIR}"
-        echo "Using custom CCACHE_DIR from cache.txt: ${CCACHE_DIR}" >&2
-    else
-        export CCACHE_DIR="$HOME/.ccache"
-        echo "cache.txt is empty, using default CCACHE_DIR: ${CCACHE_DIR}" >&2
-    fi
-else
-    export CCACHE_DIR="$HOME/.ccache"
-    echo "cache.txt not found, using default CCACHE_DIR: ${CCACHE_DIR}" >&2
+    IFS= read -r CUSTOM_CACHE_DIR < "${CACHE_CONFIG_FILE}"
+    CUSTOM_CACHE_DIR="${CUSTOM_CACHE_DIR%$'\r'}"
 fi
 
-# Ensure the directory exists
-[ ! -d "${CCACHE_DIR}" ] && mkdir -p "${CCACHE_DIR}" && echo "Created CCACHE_DIR at: ${CCACHE_DIR}" >&2
+if [ -n "${CUSTOM_CACHE_DIR}" ]; then
+    export CCACHE_DIR="${CUSTOM_CACHE_DIR}"
+    echo "Using custom CCACHE_DIR from cache.txt: ${CCACHE_DIR}" >&2
+else
+    export CCACHE_DIR="$HOME/.ccache"
+    echo "Using default CCACHE_DIR: ${CCACHE_DIR}" >&2
+fi
+
+mkdir -p "${CCACHE_DIR}"
 
 # Configure ccache if available
-if command -v ccache &>/dev/null; then
+if command -v ccache >/dev/null 2>&1; then
     export USE_CCACHE=1
-    [ -z "${CCACHE_EXEC}" ] && export CCACHE_EXEC="$(command -v ccache)"
+    export CCACHE_EXEC="${CCACHE_EXEC:-$(command -v ccache)}"
 
-    CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-40G}"
-    DIRECT_MODE="${DIRECT_MODE:-false}"
+    CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-50G}"
+    DIRECT_MODE="${DIRECT_MODE:-true}"
 
-    $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
-        && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2
+    "${CCACHE_EXEC}" \
+        -o compression=true \
+        -o compression_level=0 \
+        -o direct_mode="${DIRECT_MODE}" \
+        -o depend_mode=false \
+        -o inode_cache=true \
+        -o max_size="${CCACHE_MAXSIZE}"
 
-    CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
-    [ -n "$CURRENT_CCACHE_SIZE" ] && echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2 \
-        || echo "No cached files in ccache." >&2
+    echo "ccache enabled:"
+    echo "  CCACHE_DIR=${CCACHE_DIR}"
+    echo "  CCACHE_MAXSIZE=${CCACHE_MAXSIZE}"
+    echo "  direct_mode=${DIRECT_MODE}"
+
+    # Show current cache usage without scanning the whole cache directory
+    CACHE_SIZE="$("${CCACHE_EXEC}" -s | grep -E 'Cache size')"
+
+    if [ -n "${CACHE_SIZE}" ]; then
+        echo "  ${CACHE_SIZE}"
+    fi
 else
     echo "Error: ccache not found. Please install ccache." >&2
 fi
